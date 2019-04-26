@@ -132,9 +132,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\OneDrive\Documents\opengl stuff\glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera_m.h" />
+    <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Shader_m.h" />
   </ItemGroup>
   <ItemGroup>

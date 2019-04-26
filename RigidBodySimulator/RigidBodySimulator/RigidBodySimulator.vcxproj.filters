@@ -21,6 +21,9 @@
     <ClCompile Include="..\..\..\..\..\OneDrive\Documents\opengl stuff\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader_m.h">
@@ -28,6 +31,9 @@
     </ClInclude>
     <ClInclude Include="Camera_m.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

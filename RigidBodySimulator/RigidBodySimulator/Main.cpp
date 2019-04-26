@@ -1,5 +1,3 @@
-
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -12,6 +10,9 @@
 
 #include <iostream>
 
+#include "RigidBody.h"
+;
+RigidBody box(glm::vec2(0, 0), 1, 1, 1);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -190,8 +191,11 @@ int main()
 		// world transformation
 		
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(cubeposx, 0, 0));
+		model = glm::translate(model, glm::vec3(box.position.x, box.position.y, 0));
+		model = glm::rotate(model, box.angle, glm::vec3(0, 0, 1));
 		lightingShader.setMat4("model", model);
+		box.ComputeAccels(glm::vec2(.00001, .00001), glm::vec2(0, .5));
+		box.Update(.05);
 
 		// render the cube
 		glBindVertexArray(cubeVAO);
@@ -281,4 +285,3 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(yoffset);
 }
-
