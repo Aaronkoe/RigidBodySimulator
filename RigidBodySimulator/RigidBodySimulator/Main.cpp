@@ -153,7 +153,7 @@ int main()
 	// note that we update the lamp's position attribute's stride to reflect the updated buffer data
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
+	float cubeposx = 0;
 
 	// render loop
 	// -----------
@@ -188,13 +188,14 @@ int main()
 		lightingShader.setMat4("view", view);
 
 		// world transformation
+		
 		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(cubeposx, 0, 0));
 		lightingShader.setMat4("model", model);
 
 		// render the cube
 		glBindVertexArray(cubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-
 
 		// also draw the lamp object
 		lampShader.use();

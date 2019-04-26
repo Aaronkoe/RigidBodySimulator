@@ -1,5 +1,3 @@
-
-
 #version 330 core
 out vec4 FragColor;
 
@@ -32,5 +30,4 @@ void main()
         
     vec3 result = (ambient + diffuse + specular) * objectColor;
     FragColor = vec4(result, 1.0);
-} 
-
+}
