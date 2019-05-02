@@ -22,32 +22,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D6897A95-5A3F-4DD8-A25A-3768ECD42E5F}</ProjectGuid>
     <RootNamespace>RigidBodySimulator</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\aaron\OneDrive\Documents\opengl stuff\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\aaron\OneDrive\Documents\opengl stuff\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Shi Lu\Documents\OpenGl\includes\learnopengl;C:\Users\Shi Lu\Documents\OpenGl\includes\glm;C:\Users\Shi Lu\Documents\OpenGl\includes;C:\Users\aaron\OneDrive\Documents\opengl stuff\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Shi Lu\Documents\OpenGl\lib;C:\Users\aaron\OneDrive\Documents\opengl stuff\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\aaron\OneDrive\Documents\opengl stuff\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\aaron\OneDrive\Documents\opengl stuff\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Shi Lu\Documents\OpenGl\includes\learnopengl;C:\Users\Shi Lu\Documents\OpenGl\includes\glm;C:\Users\Shi Lu\Documents\OpenGl\includes;C:\Users\aaron\OneDrive\Documents\opengl stuff\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Shi Lu\Documents\OpenGl\lib;C:\Users\aaron\OneDrive\Documents\opengl stuff\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\OneDrive\Documents\opengl stuff\glad.c" />
+    <ClCompile Include="..\..\..\..\..\Documents\OpenGl\glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RigidBody.cpp" />
   </ItemGroup>
