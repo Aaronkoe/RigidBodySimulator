@@ -194,7 +194,7 @@ int main()
 		model = glm::translate(model, glm::vec3(box.position.x, box.position.y, 0));
 		model = glm::rotate(model, box.angle, glm::vec3(0, 0, 1));
 		lightingShader.setMat4("model", model);
-		box.ComputeAccels(glm::vec2(.00001, .00001), glm::vec2(0, .5));
+		box.ComputeAccels(glm::vec2(.00001, .00001), glm::vec2(0, .5), cubeVAO);
 		box.Update(.05);
 
 		// render the cube
