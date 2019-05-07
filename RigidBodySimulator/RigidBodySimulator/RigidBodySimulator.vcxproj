@@ -138,6 +138,7 @@
     <ClInclude Include="Camera_m.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Shader_m.h" />
+    <ClInclude Include="UtilFunc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="2.2.basic_lighting.fs" />

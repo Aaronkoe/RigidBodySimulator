@@ -11,7 +11,8 @@
 #include <iostream>
 
 #include "RigidBody.h"
-;
+
+CarnegieRigidBody carBox(1, 1, 1, 1);
 RigidBody box(glm::vec2(0, 0), 1, 1, 1);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -189,13 +190,15 @@ int main()
 		lightingShader.setMat4("view", view);
 
 		// world transformation
-		
+		carBox.ComputeForceAndTorque(glm::vec3(.00001, .0001, .00001), glm::vec3(.5, 0, .5));
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(box.position.x, box.position.y, 0));
-		model = glm::rotate(model, box.angle, glm::vec3(0, 0, 1));
+		model = glm::translate(model, carBox.position);
+		glm::vec4 axisAndAngle = carBox.GetAngleAndAxis();
+		model = glm::rotate(model, axisAndAngle[0], glm::vec3(axisAndAngle[1], axisAndAngle[2], axisAndAngle[3]));
+		PrintGlmVec3(glm::vec3(axisAndAngle[1], axisAndAngle[2], axisAndAngle[3]));
+		//model = glm::rotate(model, .3f, glm::vec3(0, 1, 0));
 		lightingShader.setMat4("model", model);
-		box.ComputeAccels(glm::vec2(.00001, .00001), glm::vec2(0, .5), cubeVAO);
-		box.Update(.05);
+		carBox.Update(.05);
 
 		// render the cube
 		glBindVertexArray(cubeVAO);

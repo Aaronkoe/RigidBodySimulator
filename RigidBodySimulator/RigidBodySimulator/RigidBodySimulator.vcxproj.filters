@@ -35,6 +35,9 @@
     <ClInclude Include="RigidBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UtilFunc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="2.2.basic_lighting.vs">
