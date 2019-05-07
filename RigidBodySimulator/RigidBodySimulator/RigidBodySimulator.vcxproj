@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Documents\OpenGl\glad.c" />
+    <ClCompile Include="..\..\..\..\..\OneDrive\Documents\opengl stuff\glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RigidBody.cpp" />
   </ItemGroup>
