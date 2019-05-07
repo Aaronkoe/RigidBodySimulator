@@ -1,4 +1,6 @@
 #pragma once
+#ifndef RIGID_BODY_H_
+#define RIGID_BODY_H_
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
@@ -51,3 +53,4 @@ public:
 	glm::vec3 force;
 	glm::vec3 torque;
 };
+#endif

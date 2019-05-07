@@ -18,10 +18,10 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\OneDrive\Documents\opengl stuff\glad.c">
+    <ClCompile Include="RigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RigidBody.cpp">
+    <ClCompile Include="..\..\..\..\..\Documents\OpenGl\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
