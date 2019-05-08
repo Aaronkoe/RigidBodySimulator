@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <learnopengl/shader_m.h>
 #include <learnopengl/camera.h>
@@ -190,13 +191,14 @@ int main()
 		lightingShader.setMat4("view", view);
 
 		// world transformation
-		carBox.ComputeForceAndTorque(glm::vec3(.00001, .0001, .00001), glm::vec3(.5, 0, .5));
+		carBox.ComputeForceAndTorque(glm::vec3(.0001, .0001, .0001), glm::vec3(-.5, .5, .5));
+		carBox.ComputeForceAndTorque(glm::vec3(-.0001, -.0001, -.0001), glm::vec3(0, 0, 0));
+		carBox.orientation = glm::normalize(carBox.orientation);
+		glm::quat quaternion = glm::quat(carBox.orientation[1], carBox.orientation[2], carBox.orientation[3], carBox.orientation[0]);
+		glm::mat4 rotation = glm::toMat4(quaternion);
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, carBox.position);
-		glm::vec4 axisAndAngle = carBox.GetAngleAndAxis();
-		model = glm::rotate(model, axisAndAngle[0], glm::vec3(axisAndAngle[1], axisAndAngle[2], axisAndAngle[3]));
-		PrintGlmVec3(glm::vec3(axisAndAngle[1], axisAndAngle[2], axisAndAngle[3]));
-		//model = glm::rotate(model, .3f, glm::vec3(0, 1, 0));
+		model = model * rotation;
 		lightingShader.setMat4("model", model);
 		carBox.Update(.05);
 

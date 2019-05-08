@@ -31,7 +31,7 @@ public:
 	void Update(float dt);
 	void PrintState();
 	void PrintForceAndTorque();
-	glm::vec4 GetAngleAndAxis();
+	glm::mat4 GetRotationMatrix();
 
 	//for a cube
 	float width, height, depth;

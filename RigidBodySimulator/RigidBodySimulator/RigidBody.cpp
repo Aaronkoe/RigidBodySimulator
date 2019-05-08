@@ -63,14 +63,6 @@ void CarnegieRigidBody::Update(float dt) {
 	this->I = this->rotation * this->Ibody * glm::transpose(this->rotation);
 	this->Iinv = glm::inverse(I);
 	this->angularVelocity = Iinv * angMomentum;
-	//glm::mat3 omegaStar = glm::mat3(0.0);
-	//omegaStar[0][1] = -angularVelocity.z;
-	//omegaStar[1][2] = angularVelocity.y;
-	//omegaStar[1][0] = angularVelocity.z;
-	//omegaStar[1][2] = -angularVelocity.x;
-	//omegaStar[2][0] = -angularVelocity.y;
-	//omegaStar[2][1] = angularVelocity.x;
-	//omega orientation
 	glm::vec3 v1 = angularVelocity;
 	glm::vec3 v2 = glm::vec3(orientation[1], orientation[2], orientation[3]);
 	float s2 = orientation[0];
@@ -78,11 +70,9 @@ void CarnegieRigidBody::Update(float dt) {
 
 	this->position += velocity * dt;
 	this->orientation += .5f * (quatProd)* dt;
-	//this->rotation += omegaStar * rotation;
 	this->linMomentum += force * dt;
 	this->angMomentum += torque * dt;
 
-	//std::cout << "det rotation =" << glm::determinant(rotation) << std::endl;
 	this->force = glm::vec3(0, 0, 0);
 	this->torque = glm::vec3(0, 0, 0);
 }
@@ -101,12 +91,24 @@ void CarnegieRigidBody::PrintForceAndTorque()
 	std::cout << "Torque: "; PrintGlmVec3(torque);
 }
 
-glm::vec4 CarnegieRigidBody::GetAngleAndAxis()
+glm::mat4 CarnegieRigidBody::GetRotationMatrix()
 {
-	float angle = 2 * acos(orientation[0]);
-	if (angle > .00001) {
-		glm::vec3 axis = glm::vec3(orientation[1], orientation[2], orientation[3]) / angle;
-		return glm::vec4(angle, axis.x, axis.y, axis.z);
-	}
-	return glm::vec4(angle, 1, 1, 1);
+	glm::mat4 rotationMatrix = glm::mat4();
+	rotationMatrix[0][0] = 1 - 2 * pow(orientation[2], 2) - 2 * pow(orientation[3], 2);
+	rotationMatrix[0][1] = 2 * orientation[1] * orientation[2] - 2 * orientation[0] * orientation[3];
+	rotationMatrix[0][2] = 2 * orientation[1] * orientation[3] + 2 * orientation[0] * orientation[2];
+	rotationMatrix[1][0] = 2 * orientation[1] * orientation[2] + 2 * orientation[0] * orientation[3];
+	rotationMatrix[1][1] = 1 - 2 * orientation[1] * orientation[1] - 2 * orientation[3] * orientation[3];
+	rotationMatrix[1][2] = 2 * orientation[2] * orientation[3] - 2 * orientation[0] * orientation[1];
+	rotationMatrix[2][0] = 2 * orientation[1] * orientation[3] - 2 * orientation[0] * orientation[2];
+	rotationMatrix[2][1] = 2 * orientation[2] * orientation[3] - 2 * orientation[0] * orientation[1];
+	rotationMatrix[2][2] = 1 - 2 * orientation[1] * orientation[1] - 2 * orientation[2] * orientation[2];
+	rotationMatrix[0][3] = 0;
+	rotationMatrix[1][3] = 0;
+	rotationMatrix[2][3] = 0;
+	rotationMatrix[3][0] = 0;
+	rotationMatrix[3][1] = 0;
+	rotationMatrix[3][2] = 0;
+	rotationMatrix[3][3] = 1;
+	return rotationMatrix;
 }
