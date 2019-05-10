@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 
 #include "UtilFunc.h"
+
+struct Contact;
 class RigidBody {
 public:
 	RigidBody(glm::vec2 initPos, float w, float h, float m);
@@ -31,7 +33,8 @@ public:
 	void Update(float dt);
 	void PrintState();
 	void PrintForceAndTorque();
-	glm::vec3 pt_velocity;
+	glm::vec3 pt_velocity(glm::vec3 p);
+	bool colliding(Contact* c);
 
 	//for a cube
 	float width, height, depth;

@@ -1,4 +1,5 @@
 #include "RigidBody.h"
+#include "Contact.h"
 RigidBody::RigidBody(glm::vec2 initPos, float w, float h, float m) {
 	this->position = initPos;
 	this->linearVelocity = glm::vec2(0, 0);
@@ -92,15 +93,15 @@ void CarnegieRigidBody::PrintForceAndTorque()
 }
 
 //velocity of a point on a rigid body
-glm::vec3 CarnegieRigidBody::pt_velocity(CarnegieRigidBody* body, glm::vec3 p)
+glm::vec3 CarnegieRigidBody::pt_velocity(glm::vec3 p)
 {
-	return body->velocity + (glm::cross(body->angularVelocity, (p - body->position)));
+	return velocity + (glm::cross(angularVelocity, (p - position)));
 }
 const double THRESHOLD = .1;
 bool CarnegieRigidBody::colliding(Contact* c)
 {
-	glm::vec3 padot = pt_velocity(c->a, p);
-	glm::vec3 pbdot = pt_velocity(c->b, p);
+	glm::vec3 padot = c->a->pt_velocity(c->p);
+	glm::vec3 pbdot = c->b->pt_velocity(c->p);
 	double vrel = glm::dot(c->n, (padot - pbdot));
 	if (vrel > THRESHOLD) {
 		return FALSE;
