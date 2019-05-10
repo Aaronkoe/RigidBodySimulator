@@ -1,5 +1,35 @@
 #include "RigidBody.h"
 #include "Contact.h"
+RigidBody::RigidBody(glm::vec2 initPos, float w, float h, float m) {
+	this->position = initPos;
+	this->linearVelocity = glm::vec2(0, 0);
+	this->linearAcceleration = glm::vec2(0, 0);
+	this->angle = 0;
+	this->angularVelocity = 0;
+	this->angularAcceleration = 0;
+	this->mass = m;
+	this->width = w;
+	this->height = h;
+	this->momentOfInertia = m * (h * h + w * w) / 12.0;
+}
+
+void RigidBody::ComputeAccels(glm::vec2 force, glm::vec2 r, int cubeVao) {
+	linearAcceleration += (force / mass);
+	angularAcceleration += (r.x * force.y - r.y * force.x) / momentOfInertia;
+	glBindVertexArray(cubeVao);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void RigidBody::Update(float dt) {
+	linearVelocity += linearAcceleration * dt;
+	position += linearVelocity * dt;
+	angularVelocity += angularAcceleration * dt;
+	angle += angularVelocity * dt;
+	linearAcceleration = glm::vec2(0, 0);
+	angularAcceleration = 0;
+	glm::mat4 model = glm::mat4(1.0f);
+}
+
 CarnegieRigidBody::CarnegieRigidBody(float mass, float width, float height, float depth)
 {
 	this->mass = mass;
@@ -22,15 +52,6 @@ CarnegieRigidBody::CarnegieRigidBody(float mass, float width, float height, floa
 	this->angularVelocity = glm::vec3(0, 0, 0);
 	this->force = glm::vec3(0, 0, 0);
 	this->torque = glm::vec3(0, 0, 0);
-
-	vertices[0] = glm::vec3(width / 2, height / 2, depth / 2);
-	vertices[1] = glm::vec3(width / 2, height / 2, -depth / 2);
-	vertices[2] = glm::vec3(width / 2, -height / 2, depth / 2);
-	vertices[3] = glm::vec3(width / 2, -height / 2, -depth / 2);
-	vertices[4] = glm::vec3(-width / 2, -height / 2, depth / 2);
-	vertices[5] = glm::vec3(-width / 2, height / 2, -depth / 2);
-	vertices[6] = glm::vec3(-width / 2, -height / 2, depth / 2);
-	vertices[7] = glm::vec3(-width / 2, -height / 2, -depth / 2);
 }
 
 void CarnegieRigidBody::ComputeForceAndTorque(glm::vec3 force, glm::vec3 r) {
@@ -92,14 +113,7 @@ bool CarnegieRigidBody::colliding(Contact* c)
 		return TRUE;
 	}
 }
-
-glm::vec3 CarnegieRigidBody::GetVertexInWorldSpace(int vertex)
-{
-	glm::mat3 rotationMatrix = glm::toMat3(glm::quat(orientation[1], orientation[2], orientation[3], orientation[0]));
-	return rotationMatrix * vertices[vertex] + position;
-}
-
-void collision(Contact* c, double epsilon)
+void CarnegieRigidBody::collision(Contact* c, double epsilon)
 {
 	glm::vec3 padot = c->a->pt_velocity(c->p);
 	glm::vec3 pbdot = c->b->pt_velocity(c->p);
@@ -125,5 +139,21 @@ void collision(Contact* c, double epsilon)
 
 	c->a->angularVelocity = c->a->Iinv * c->a->angMomentum;
 	c->b->angularVelocity = c->b->Iinv * c->b->angMomentum;
+}
+void CarnegieRigidBody::find_all_collisions(Contact contacts[], int ncontacts)
+{
+	bool had_collision;
+	double epsilon = .5;
+
+	do {
+		had_collision = FALSE;
+		for (int i = 0; i < ncontacts; i++) {
+			if (colliding(&contacts[i])) {
+				collision(&contacts[i], epsilon);
+				had_collision = TRUE;
+				//ode_discontinuos();
+			}
+		}
+	} while (had_collision == TRUE);
 }
 
