@@ -113,7 +113,7 @@ bool CarnegieRigidBody::colliding(Contact* c)
 		return TRUE;
 	}
 }
-void collision(Contact* c, double epsilon)
+void CarnegieRigidBody::collision(Contact* c, double epsilon)
 {
 	glm::vec3 padot = c->a->pt_velocity(c->p);
 	glm::vec3 pbdot = c->b->pt_velocity(c->p);
@@ -139,5 +139,21 @@ void collision(Contact* c, double epsilon)
 
 	c->a->angularVelocity = c->a->Iinv * c->a->angMomentum;
 	c->b->angularVelocity = c->b->Iinv * c->b->angMomentum;
+}
+void CarnegieRigidBody::find_all_collisions(Contact contacts[], int ncontacts)
+{
+	bool had_collision;
+	double epsilon = .5;
+
+	do {
+		had_collision = FALSE;
+		for (int i = 0; i < ncontacts; i++) {
+			if (colliding(&contacts[i])) {
+				collision(&contacts[i], epsilon);
+				had_collision = TRUE;
+				//ode_discontinuos();
+			}
+		}
+	} while (had_collision == TRUE);
 }
 

@@ -35,6 +35,8 @@ public:
 	void PrintForceAndTorque();
 	glm::vec3 pt_velocity(glm::vec3 p);
 	bool colliding(Contact* c);
+	void collision(Contact* c, double epsilon);
+	void find_all_collisions(Contact contacts[], int ncontacts);
 
 	//for a cube
 	float width, height, depth;
