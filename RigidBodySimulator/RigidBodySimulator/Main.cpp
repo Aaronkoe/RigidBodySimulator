@@ -14,8 +14,7 @@
 #include "RigidBody.h"
 
 CarnegieRigidBody carBox(1, 1, 1, 1);
-CarnegieRigidBody carBox2(1, 1, 1, 1);
-RigidBody box(glm::vec2(0, 0), 1, 1, 1);
+CarnegieRigidBody carBox2(1, .5, .5, .5);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -40,7 +39,8 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
-	carBox2.position = glm::vec3(2, 2, 2);
+	carBox.position = glm::vec3(1, 1, 1);
+	carBox2.position = glm::vec3(1.5, .5, .5);
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -193,14 +193,16 @@ int main()
 		lightingShader.setMat4("view", view);
 
 		// world transformation
-		carBox.ComputeForceAndTorque(glm::vec3(.0001, .0001, .0001), glm::vec3(-.5, .5, .5));
-		carBox.ComputeForceAndTorque(glm::vec3(-.0001, -.0001, -.0001), glm::vec3(0, 0, 0));
+		//carBox.ComputeForceAndTorque(glm::vec3(0, .001, 0), glm::vec3(.5, .5, .5));
+		PrintGlmVec3(carBox.GetVertexInWorldSpace(5));
+		//carBox.ComputeForceAndTorque(glm::vec3(0, -.001, 0), glm::vec3(0, 0, 0));
 		carBox.orientation = glm::normalize(carBox.orientation);
 		glm::quat quaternion = glm::quat(carBox.orientation[1], carBox.orientation[2], carBox.orientation[3], carBox.orientation[0]);
 		glm::mat4 rotation = glm::toMat4(quaternion);
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, carBox.position);
 		model = model * rotation;
+		model = glm::scale(model, glm::vec3(carBox.width, carBox.height, carBox.depth));
 		lightingShader.setMat4("model", model);
 		carBox.Update(.05);
 
@@ -213,6 +215,7 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, carBox2.position);
 		model = model * rotation;
+		model = glm::scale(model, glm::vec3(carBox2.width, carBox2.height, carBox2.depth));
 		lightingShader.setMat4("model", model);
 
 

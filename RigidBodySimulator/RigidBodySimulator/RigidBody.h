@@ -3,29 +3,12 @@
 #define RIGID_BODY_H_
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <GLFW/glfw3.h>
 
 #include "UtilFunc.h"
 
 struct Contact;
-class RigidBody {
-public:
-	RigidBody(glm::vec2 initPos, float w, float h, float m);
-	glm::vec2 position;
-	glm::vec2 linearVelocity;
-	glm::vec2 linearAcceleration;
-	float angle;
-	float angularVelocity;
-	float angularAcceleration;
-	float momentOfInertia;
-	float mass;
-	float width, height;
-
-	void ComputeAccels(glm::vec2 force, glm::vec2 r, int cubeVao);
-	void Update(float dt);
-};
-
-// rigid body from carnegie
 class CarnegieRigidBody {
 public:
 	CarnegieRigidBody(float mass, float width, float height, float depth);
@@ -55,5 +38,9 @@ public:
 	
 	glm::vec3 force;
 	glm::vec3 torque;
+
+	glm::vec3 GetVertexInWorldSpace(int vertex);
+
+	glm::vec3 vertices[8];
 };
 #endif
