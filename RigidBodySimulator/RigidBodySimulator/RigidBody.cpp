@@ -91,24 +91,4 @@ void CarnegieRigidBody::PrintForceAndTorque()
 	std::cout << "Torque: "; PrintGlmVec3(torque);
 }
 
-glm::mat4 CarnegieRigidBody::GetRotationMatrix()
-{
-	glm::mat4 rotationMatrix = glm::mat4();
-	rotationMatrix[0][0] = 1 - 2 * pow(orientation[2], 2) - 2 * pow(orientation[3], 2);
-	rotationMatrix[0][1] = 2 * orientation[1] * orientation[2] - 2 * orientation[0] * orientation[3];
-	rotationMatrix[0][2] = 2 * orientation[1] * orientation[3] + 2 * orientation[0] * orientation[2];
-	rotationMatrix[1][0] = 2 * orientation[1] * orientation[2] + 2 * orientation[0] * orientation[3];
-	rotationMatrix[1][1] = 1 - 2 * orientation[1] * orientation[1] - 2 * orientation[3] * orientation[3];
-	rotationMatrix[1][2] = 2 * orientation[2] * orientation[3] - 2 * orientation[0] * orientation[1];
-	rotationMatrix[2][0] = 2 * orientation[1] * orientation[3] - 2 * orientation[0] * orientation[2];
-	rotationMatrix[2][1] = 2 * orientation[2] * orientation[3] - 2 * orientation[0] * orientation[1];
-	rotationMatrix[2][2] = 1 - 2 * orientation[1] * orientation[1] - 2 * orientation[2] * orientation[2];
-	rotationMatrix[0][3] = 0;
-	rotationMatrix[1][3] = 0;
-	rotationMatrix[2][3] = 0;
-	rotationMatrix[3][0] = 0;
-	rotationMatrix[3][1] = 0;
-	rotationMatrix[3][2] = 0;
-	rotationMatrix[3][3] = 1;
-	return rotationMatrix;
-}
+
