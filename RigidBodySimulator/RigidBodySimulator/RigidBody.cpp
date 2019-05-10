@@ -91,4 +91,25 @@ void CarnegieRigidBody::PrintForceAndTorque()
 	std::cout << "Torque: "; PrintGlmVec3(torque);
 }
 
+//velocity of a point on a rigid body
+glm::vec3 CarnegieRigidBody::pt_velocity(CarnegieRigidBody* body, glm::vec3 p)
+{
+	return body->velocity + (glm::cross(body->angularVelocity, (p - body->position)));
+}
+const double THRESHOLD = .1;
+bool CarnegieRigidBody::colliding(Contact* c)
+{
+	glm::vec3 padot = pt_velocity(c->a, p);
+	glm::vec3 pbdot = pt_velocity(c->b, p);
+	double vrel = glm::dot(c->n, (padot - pbdot));
+	if (vrel > THRESHOLD) {
+		return FALSE;
+	}
+	if (vrel > -THRESHOLD) {
+		return FALSE;
+	}
+	else {
+		return TRUE;
+	}
+}
 
