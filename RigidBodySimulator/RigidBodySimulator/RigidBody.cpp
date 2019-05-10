@@ -115,18 +115,18 @@ bool CarnegieRigidBody::colliding(Contact* c)
 }
 void collision(Contact* c, double epsilon)
 {
-	glm::vec3 padot = pt_velocity(c->a, c->p);
-	glm::vec3 pbdot = pt_velocity(c->b, c->p);
+	glm::vec3 padot = c->a->pt_velocity(c->p);
+	glm::vec3 pbdot = c->b->pt_velocity(c->p);
 	glm::vec3 n = c->n,
-		ra = p - c->a->x,
-		rb = p - c->b->x;
+		ra = c->p - c->a->position,
+		rb = c->p - c->b->position;
 	double vrel = glm::dot(n, (padot - pbdot)),
 		numerator = -(1 + epsilon) * vrel;
 	double term1 = 1 / c->a->mass,
 		term2 = 1 / c->b->mass,
-		term3 = n * ((c->a->Iinv * glm::cross((glm::cross(ra, n)), ra)),
-			term4 = n * ((c->b->Iinv * glm::cross((glm::cross(rb, n)), rb)));
-	double j = numerator / (term1 + term2 + term3 + term4);
+		term3 = glm::dot( n, ((c->a->Iinv * glm::cross((glm::cross(ra, n)), ra)))),
+		term4 = glm::dot(n, ((c->b->Iinv * glm::cross((glm::cross(rb, n)), rb))));
+	float j = numerator / (term1 + term2 + term3 + term4);
 	glm::vec3 force = j * n;
 
 	c->a->linMomentum += force;
@@ -137,7 +137,7 @@ void collision(Contact* c, double epsilon)
 	c->a->velocity = c->a->linMomentum / c->a->mass;
 	c->b->velocity = c->b->linMomentum / c->b->mass;
 
-	c->a->angVelocity = c->a->Iinv * c->a->angMomentum;
-	c->b->angVelocity = c->b->Iinv * c->b->angMomentum;
+	c->a->angularVelocity = c->a->Iinv * c->a->angMomentum;
+	c->b->angularVelocity = c->b->Iinv * c->b->angMomentum;
 }
 
