@@ -14,6 +14,7 @@
 #include "RigidBody.h"
 
 CarnegieRigidBody carBox(1, 1, 1, 1);
+CarnegieRigidBody carBox2(1, 1, 1, 1);
 RigidBody box(glm::vec2(0, 0), 1, 1, 1);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -39,6 +40,7 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
+	carBox2.position = glm::vec3(2, 2, 2);
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -201,6 +203,18 @@ int main()
 		model = model * rotation;
 		lightingShader.setMat4("model", model);
 		carBox.Update(.05);
+
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		lightingShader.setVec3("objectColor", 0.5f, 1.0f, 0.31f);
+		quaternion = glm::quat(carBox2.orientation[1], carBox2.orientation[2], carBox2.orientation[3], carBox2.orientation[0]);
+		rotation = glm::toMat4(quaternion);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, carBox2.position);
+		model = model * rotation;
+		lightingShader.setMat4("model", model);
+
 
 		// render the cube
 		glBindVertexArray(cubeVAO);

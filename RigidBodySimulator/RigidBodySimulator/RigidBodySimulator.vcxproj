@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera_m.h" />
+    <ClInclude Include="Contact.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Shader_m.h" />
     <ClInclude Include="UtilFunc.h" />
