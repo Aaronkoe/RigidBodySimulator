@@ -4,15 +4,53 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
-
+#include <learnopengl/shader_m.h>
 #include "UtilFunc.h"
+
+
+class RigidBody2D {
+public:
+	RigidBody2D(float m, float w, float h);
+	void Draw(Shader& shader, unsigned int vao);
+	void ApplyForce(glm::vec2 force, glm::vec2 arm);
+	void Update(float dt);
+	void FloorCollision();
+	glm::vec2 Rotate(glm::vec2);
+	glm::vec2 GetVelocityOfPoint(glm::vec2);
+	glm::vec2 PointBodyToWorld(glm::vec2);
+	glm::vec2 PointWorldToBody(glm::vec2);
+	bool IsPointInside(glm::vec2 worldSpacePoint);
+	bool AreBodiesColliding(RigidBody2D* otherBody);
+	void HandleCollision(RigidBody2D* otherBody);
+	glm::vec2 GetNormalOfPoint(glm::vec2 worldSpacePoint);
+
+	glm::vec2 position;
+	glm::vec2 linearVelocity;
+	glm::vec2 force;
+
+	float angle;
+	float angularVelocity;
+	float torque;
+
+	float width;
+	float height;
+	float mass;
+	float momentOfInertia;
+
+	glm::vec2 vertices[4];
+};
+
+
+
+
 
 struct Contact;
 class CarnegieRigidBody {
 public:
 	CarnegieRigidBody(float mass, float width, float height, float depth);
-	void ComputeForceAndTorque(glm::vec3 force, glm::vec3 r);
+	void ApplyImpulse(glm::vec3 force, glm::vec3 r);
 	void Update(float dt);
 	void PrintState();
 	void PrintForceAndTorque();
@@ -20,6 +58,9 @@ public:
 	bool colliding(Contact* c);
 	void collision(Contact* c, double epsilon);
 	void find_all_collisions(Contact contacts[], int ncontacts);
+	glm::vec3 WorldToBodySpace(glm::vec3 p);
+	glm::vec3 BodyToWorldSpace(glm::vec3 p);
+	void FloorCollision();
 
 	//for a cube
 	float width, height, depth;
@@ -29,7 +70,7 @@ public:
 
 	glm::vec3 position;    // x(t)
 	glm::mat3 rotation;    // R(t)
-	glm::vec4 orientation;  // q(t)
+	glm::quat orientation;  // q(t)
 	glm::vec3 linMomentum; // P(t)
 	glm::vec3 angMomentum; // L(t)
 	
@@ -40,8 +81,6 @@ public:
 	
 	glm::vec3 force;
 	glm::vec3 torque;
-
-	glm::vec3 GetVertexInWorldSpace(int vertex);
 
 	glm::vec3 vertices[8];
 };
