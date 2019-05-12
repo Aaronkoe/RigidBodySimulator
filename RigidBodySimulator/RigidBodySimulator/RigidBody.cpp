@@ -211,8 +211,9 @@ void RigidBody2D::Draw(Shader& shader, unsigned int vao)
 	glm::mat4 model = glm::mat4(1.0);
 	model = glm::translate(model, glm::vec3(position.x, position.y, 0));
 	model = glm::rotate(model, angle, glm::vec3(0, 0, 1));
-	model = glm::scale(model, glm::vec3(width, height, 1));
+	model = glm::scale(model, glm::vec3(width, height, depth));
 	shader.setMat4("model", model);
+	shader.setVec3("objectColor", color);
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
@@ -302,21 +303,14 @@ bool RigidBody2D::IsPointInside(glm::vec2 worldSpacePoint)
 	return false;
 }
 
-bool RigidBody2D::AreBodiesColliding(RigidBody2D* otherBody)
+int RigidBody2D::IsMyVertexInside(RigidBody2D* otherBody)
 {
 	for (int i = 0; i < 4; ++i) {
 		if (otherBody->IsPointInside(PointBodyToWorld(vertices[i]))) {
-			std::cout << "hi";
-			return true;
+			return i;
 		}
 	}
-	for (int i = 0; i < 4; ++i) {
-		if (IsPointInside(otherBody->PointBodyToWorld(otherBody->vertices[i]))) {
-			std::cout << "hi";
-			return true;
-		}
-	}
-	return false;
+	return -1;
 }
 
 void RigidBody2D::HandleCollision(RigidBody2D* otherBody)
@@ -369,24 +363,36 @@ void RigidBody2D::HandleCollision(RigidBody2D* otherBody)
 glm::vec2 RigidBody2D::GetNormalOfPoint(glm::vec2 worldSpacePoint)
 {
 	glm::vec2 bodySpacePoint = PointWorldToBody(worldSpacePoint);
-    // need to do this better
-	int closestVert = 0;
-	float dist = glm::length(bodySpacePoint - vertices[0]);
-	for (int i = 1; i < 4; i++) {
-		float newDist = glm::length(bodySpacePoint - vertices[i]);
-		if (newDist < dist) {
-			closestVert = i;
-			dist = newDist;
+	if (bodySpacePoint.x > 0 && bodySpacePoint.y > 0) {
+		if (bodySpacePoint.x / width > bodySpacePoint.y / height) {
+			return glm::normalize(Rotate(glm::vec2(1, 0)));
+		}
+		else {
+			return glm::normalize(Rotate(glm::vec2(0, 1)));
 		}
 	}
-	int otherVertex;
-	int otherVertex1 = (closestVert - 1 + 4) % 4;
-	int otherVertex2 = (closestVert + 1) % 4;
-	if (glm::dot(vertices[otherVertex1] - vertices[closestVert], bodySpacePoint) < glm::dot(vertices[otherVertex2] - vertices[closestVert], bodySpacePoint)) {
-		otherVertex = otherVertex2;
+	else if (bodySpacePoint.x > 0 && bodySpacePoint.y < 0) {
+		if (bodySpacePoint.x / width > -bodySpacePoint.y / height) {
+			return glm::normalize(Rotate(glm::vec2(1, 0)));
+		}
+		else {
+			return glm::normalize(Rotate(glm::vec2(0, -1)));
+		}
 	}
-	else {
-		otherVertex = otherVertex1;
+	else if (bodySpacePoint.x < 0 && bodySpacePoint.y < 0) {
+		if (-bodySpacePoint.x / width > -bodySpacePoint.y / height) {
+			return glm::normalize(Rotate(glm::vec2(-1, 0)));
+		}
+		else {
+			return glm::normalize(Rotate(glm::vec2(0, -1)));
+		}
 	}
-	return glm::normalize(worldSpacePoint - glm::proj(worldSpacePoint, vertices[otherVertex] - vertices[closestVert]));
+	else if (bodySpacePoint.x < 0 && bodySpacePoint.y > 0) {
+		if (-bodySpacePoint.x / width > bodySpacePoint.y / height) {
+			return glm::normalize(Rotate(glm::vec2(-1, 0)));
+		}
+		else {
+			return glm::normalize(Rotate(glm::vec2(0, 1)));
+		}
+	}
 }

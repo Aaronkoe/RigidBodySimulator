@@ -12,10 +12,13 @@
 #include <iostream>
 
 #include "RigidBody.h"
+#include "RigidBodySimulator.h"
 
 RigidBody2D box(1, 1, 1);
-RigidBody2D box2(1, .1, .1);
+RigidBody2D box2(1, 1, 1);
 RigidBody2D box3(1, 2, .5);
+RigidBody2D box4(1, .5, .5);
+RigidBody2D floorBox(100000000, 100, 1);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -40,35 +43,27 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
-	glm::vec2 normal = box.GetNormalOfPoint(glm::vec2(.1, .5));
-	std::cout << normal.x << ", " << normal.y << std::endl;
-	std::cout << (-1 + 4) % 4 << std::endl;
-	box.angle = 3.14159 / 3;
-	if (box.AreBodiesColliding(&box2)) {
-		std::cout << "This should show right?" << std::endl;
-	}
-	else {
-		std::cout << "This should probably not show" << std::endl;
-	}
-	box.position = glm::vec2(1, 1);
-	box2.position = glm::vec2(1, 2);
-	box3.position = glm::vec2(2, 2);
-	glm::vec2 uprightcornerworld = box.PointBodyToWorld(glm::vec2(.5, .5));
-	std::cout << uprightcornerworld.x << ", " << uprightcornerworld.y << std::endl;
-	glm::vec2 upRight = box.PointWorldToBody(uprightcornerworld);
-	std::cout << upRight.x << ", " << upRight.y << std::endl;
-	if (box.IsPointInside(glm::vec2(1, 1))) {
-		std::cout << "COM is inside body at 1,1" << std::endl;
-	}
-	else {
-		std::cout << "COM is not inside?? ffdssd" << std::endl;
-	}
-	if (box.IsPointInside(glm::vec2(1, 1.6))) {
-		std::cout << "UR corner" << std::endl;
-	}
-	else {
-		std::cout << "UR CORNER Not inside?? asdfsa" << std::endl;
-	}
+	RigidBodySimulator rigidBodySimulator;
+	rigidBodySimulator.rigidBodies.push_back(&box);
+	rigidBodySimulator.rigidBodies.push_back(&box2);
+	rigidBodySimulator.rigidBodies.push_back(&box3);
+	rigidBodySimulator.rigidBodies.push_back(&floorBox);
+	rigidBodySimulator.rigidBodies.push_back(&box4);
+	box.position = glm::vec2(0, -1);
+	box2.color = glm::vec3(.5, 1.0, .31);
+	box3.color = glm::vec3(.31, .5, 1.0);
+	box.angularVelocity = .0;
+	box2.position = glm::vec2(0, 1);
+	box2.angularVelocity = .0;
+	box2.linearVelocity = glm::vec2(0, -.005);
+	box3.position = glm::vec2(0, 2);
+	box3.angle = 3.14159;
+	floorBox.position = glm::vec2(0, -2);
+	floorBox.depth = 100;
+	floorBox.color = glm::vec3(.25, .2, .2);
+	box4.position = glm::vec2(-10, 0);
+	box4.linearVelocity = glm::vec2(1, .2);
+
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -197,6 +192,7 @@ int main()
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		std::cout << "frame delta: " << deltaTime << std::endl;
 
 		// input
 		// -----
@@ -221,31 +217,11 @@ int main()
 		lightingShader.setMat4("view", view);
 
 		// world transformation
-		if (box.AreBodiesColliding(&box2)) {
-			box.HandleCollision(&box2);
-		}
-		if (box.AreBodiesColliding(&box3)) {
-			box.HandleCollision(&box3);
-		}
-		if (box2.AreBodiesColliding(&box3)) {
-			box.HandleCollision(&box3);
-		}
-		box.ApplyForce(glm::vec2(0, -.001), glm::vec2(0, 0));
-		box.Update(.05);
-		box.Draw(lightingShader, cubeVAO);
-		box.FloorCollision();
+		rigidBodySimulator.DrawBodies(lightingShader, cubeVAO);
+		rigidBodySimulator.UpdateLoop(.05);
+		rigidBodySimulator.ApplyAcceleration(glm::vec2(0, -.1));
 
-		lightingShader.setVec3("objectColor", .5f, 1.0f, .31f);
-		box2.Draw(lightingShader, cubeVAO);
-		box2.ApplyForce(glm::vec2(0, -.001), glm::vec2(0, 0));
-		box2.Update(.05);
-		box2.FloorCollision();
 
-		lightingShader.setVec3("objectColor", .31, 1.0f, .5f);
-		box3.Draw(lightingShader, cubeVAO);
-		box3.ApplyForce(glm::vec2(0, -.001), glm::vec2(0, 0));
-		box3.Update(.05);
-		box3.FloorCollision();
 
 
 		// also draw the lamp object

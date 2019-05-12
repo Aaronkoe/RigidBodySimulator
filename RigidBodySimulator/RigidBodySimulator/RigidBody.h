@@ -23,7 +23,7 @@ public:
 	glm::vec2 PointBodyToWorld(glm::vec2);
 	glm::vec2 PointWorldToBody(glm::vec2);
 	bool IsPointInside(glm::vec2 worldSpacePoint);
-	bool AreBodiesColliding(RigidBody2D* otherBody);
+	int IsMyVertexInside(RigidBody2D* otherBody);
 	void HandleCollision(RigidBody2D* otherBody);
 	glm::vec2 GetNormalOfPoint(glm::vec2 worldSpacePoint);
 
@@ -37,8 +37,11 @@ public:
 
 	float width;
 	float height;
+	float depth = 1;
 	float mass;
 	float momentOfInertia;
+
+	glm::vec3 color = glm::vec3(1.0f, .5f, .31f);
 
 	glm::vec2 vertices[4];
 };
