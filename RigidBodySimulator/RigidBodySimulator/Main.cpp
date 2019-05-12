@@ -21,8 +21,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -33,14 +33,16 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+bool paused = true;
 
 // lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
-	carBox.position = glm::vec3(1, 1, 1);
+	carBox.position = glm::vec3(0, 0, 0);
 	carBox2.position = glm::vec3(1.5, .5, .5);
+	//carBox.angMomentum = glm::vec3(.1, .1, .1);
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -193,9 +195,10 @@ int main()
 		lightingShader.setMat4("view", view);
 
 		// world transformation
-		//carBox.ComputeForceAndTorque(glm::vec3(0, .001, 0), glm::vec3(.5, .5, .5));
-		PrintGlmVec3(carBox.GetVertexInWorldSpace(5));
-		//carBox.ComputeForceAndTorque(glm::vec3(0, -.001, 0), glm::vec3(0, 0, 0));
+		if (!paused) {
+			carBox.ComputeForceAndTorque(glm::vec3(0, .001, 0), glm::vec3(.5, .5, .5));
+			carBox.ComputeForceAndTorque(glm::vec3(0, -.001, 0), glm::vec3(0, 0, 0));
+		}
 		carBox.orientation = glm::normalize(carBox.orientation);
 		glm::quat quaternion = glm::quat(carBox.orientation[1], carBox.orientation[2], carBox.orientation[3], carBox.orientation[0]);
 		glm::mat4 rotation = glm::toMat4(quaternion);
@@ -220,8 +223,8 @@ int main()
 
 
 		// render the cube
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glBindVertexArray(cubeVAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// also draw the lamp object
 		lampShader.use();
@@ -269,6 +272,10 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+		paused = !paused;
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
