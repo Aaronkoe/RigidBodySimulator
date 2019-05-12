@@ -40,6 +40,9 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
+	glm::vec2 normal = box.GetNormalOfPoint(glm::vec2(.1, .5));
+	std::cout << normal.x << ", " << normal.y << std::endl;
+	std::cout << (-1 + 4) % 4 << std::endl;
 	box.angle = 3.14159 / 3;
 	if (box.AreBodiesColliding(&box2)) {
 		std::cout << "This should show right?" << std::endl;

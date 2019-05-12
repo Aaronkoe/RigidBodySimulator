@@ -370,5 +370,23 @@ glm::vec2 RigidBody2D::GetNormalOfPoint(glm::vec2 worldSpacePoint)
 {
 	glm::vec2 bodySpacePoint = PointWorldToBody(worldSpacePoint);
     // need to do this better
-	return glm::normalize(position - bodySpacePoint);
+	int closestVert = 0;
+	float dist = glm::length(bodySpacePoint - vertices[0]);
+	for (int i = 1; i < 4; i++) {
+		float newDist = glm::length(bodySpacePoint - vertices[i]);
+		if (newDist < dist) {
+			closestVert = i;
+			dist = newDist;
+		}
+	}
+	int otherVertex;
+	int otherVertex1 = (closestVert - 1 + 4) % 4;
+	int otherVertex2 = (closestVert + 1) % 4;
+	if (glm::dot(vertices[otherVertex1] - vertices[closestVert], bodySpacePoint) < glm::dot(vertices[otherVertex2] - vertices[closestVert], bodySpacePoint)) {
+		otherVertex = otherVertex2;
+	}
+	else {
+		otherVertex = otherVertex1;
+	}
+	return glm::normalize(worldSpacePoint - glm::proj(worldSpacePoint, vertices[otherVertex] - vertices[closestVert]));
 }

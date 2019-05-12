@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/projection.hpp>
 #include <GLFW/glfw3.h>
 #include <learnopengl/shader_m.h>
 #include "UtilFunc.h"
