@@ -44,7 +44,7 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 int main()
 {
 	RigidBodySimulator rigidBodySimulator;
-	rigidBodySimulator.rigidBodies.push_back(&box);
+	/*rigidBodySimulator.rigidBodies.push_back(&box);
 	rigidBodySimulator.rigidBodies.push_back(&box2);
 	rigidBodySimulator.rigidBodies.push_back(&box3);
 	rigidBodySimulator.rigidBodies.push_back(&floorBox);
@@ -62,7 +62,15 @@ int main()
 	floorBox.depth = 100;
 	floorBox.color = glm::vec3(.25, .2, .2);
 	box4.position = glm::vec2(-10, 0);
-	box4.linearVelocity = glm::vec2(1, .2);
+	box4.linearVelocity = glm::vec2(1, .2);*/
+
+	rigidBodySimulator.rigidBodies.push_back(&box);
+	box.position = glm::vec2(0, -1);
+	box.linearVelocity = glm::vec2(1, .2);
+	rigidBodySimulator.rigidBodies.push_back(&floorBox);
+	floorBox.position = glm::vec2(0, -2);
+	floorBox.depth = 100;
+	floorBox.color = glm::vec3(.25, .2, .2);
 
 	// glfw: initialize and configure
 	// ------------------------------
