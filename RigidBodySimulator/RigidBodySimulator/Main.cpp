@@ -14,19 +14,25 @@
 #include "RigidBody.h"
 #include "RigidBodySimulator.h"
 
+bool paused = true;
 RigidBody2D box(1, 1, 1);
 RigidBody2D box2(1, 1, 1);
 RigidBody2D box3(1, 2, .5);
 RigidBody2D box4(1, .5, .5);
-RigidBody2D floorBox(100000000, 100, 1);
+RigidBody2D box5(2, 2, 2);
+RigidBody2D boxes[20];
+RigidBody2D floorBox(100000000, 11, 1);
+RigidBody2D leftWallBox(10000000, 1, 10);
+RigidBody2D rightWallBox(10000000, 1, 10);
+RigidBody2D ceilingBox(10000000, 11, 1);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1080;
+const unsigned int SCR_HEIGHT = 720;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -44,33 +50,74 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 int main()
 {
 	RigidBodySimulator rigidBodySimulator;
-	/*rigidBodySimulator.rigidBodies.push_back(&box);
+	rigidBodySimulator.rigidBodies.push_back(&box);
 	rigidBodySimulator.rigidBodies.push_back(&box2);
 	rigidBodySimulator.rigidBodies.push_back(&box3);
 	rigidBodySimulator.rigidBodies.push_back(&floorBox);
-	rigidBodySimulator.rigidBodies.push_back(&box4);
-	box.position = glm::vec2(0, -1);
-	box2.color = glm::vec3(.5, 1.0, .31);
-	box3.color = glm::vec3(.31, .5, 1.0);
-	box.angularVelocity = .0;
-	box2.position = glm::vec2(0, 1);
-	box2.angularVelocity = .0;
-	box2.linearVelocity = glm::vec2(0, -.005);
-	box3.position = glm::vec2(0, 2);
-	box3.angle = 3.14159;
 	floorBox.position = glm::vec2(0, -2);
-	floorBox.depth = 100;
 	floorBox.color = glm::vec3(.25, .2, .2);
-	box4.position = glm::vec2(-10, 0);
-	box4.linearVelocity = glm::vec2(1, .2);*/
 
-	rigidBodySimulator.rigidBodies.push_back(&box);
 	box.position = glm::vec2(0, -1);
-	box.linearVelocity = glm::vec2(1, .2);
+	box.color = glm::vec3(1.0, .5, .31);
+
+	box2.position = glm::vec2(1, 1);
+	box2.color = glm::vec3(.5, 1.0, .31);
+
+	box3.position = glm::vec2(0, 0);
+	box3.color = glm::vec3(.31, .5, 1.0);
+	/* 5 boxes in an arena
+	rigidBodySimulator.rigidBodies.push_back(&box);
+	rigidBodySimulator.rigidBodies.push_back(&box2);
+	rigidBodySimulator.rigidBodies.push_back(&box3);
 	rigidBodySimulator.rigidBodies.push_back(&floorBox);
+	rigidBodySimulator.rigidBodies.push_back(&leftWallBox);
+	rigidBodySimulator.rigidBodies.push_back(&rightWallBox);
+	rigidBodySimulator.rigidBodies.push_back(&ceilingBox);
+	rigidBodySimulator.rigidBodies.push_back(&box4);
+	rigidBodySimulator.rigidBodies.push_back(&box5);
 	floorBox.position = glm::vec2(0, -2);
-	floorBox.depth = 100;
 	floorBox.color = glm::vec3(.25, .2, .2);
+	ceilingBox.position = glm::vec2(0, 9.05);
+	ceilingBox.color = floorBox.color;
+	leftWallBox.position = glm::vec2(-6, 3.51);
+	leftWallBox.color = floorBox.color;
+	rightWallBox.position = glm::vec2(6, 3.51);
+	rightWallBox.color = floorBox.color;
+
+	box.position = glm::vec2(-1, 0);
+	box.color = glm::vec3(1.0, .5, .31);
+	box.linearVelocity = glm::vec2(.1, .12);
+	box.angularVelocity = .1;
+
+	box2.position = glm::vec2(1, 0);
+	box2.color = glm::vec3(.5, 1.0, .31);
+
+	box3.position = glm::vec2(0, 1);
+	box3.color = glm::vec3(.31, .5, 1.0);
+
+	box4.position = glm::vec2(0, 4);
+	box4.color = glm::vec3(.5, .31, 1.0);
+	box4.linearVelocity = glm::vec2(0, .2);
+	box4.angularVelocity = .3;
+
+	box5.position = glm::vec2(3, 4);
+	box5.color = glm::vec3(1.0, .31, .5);
+	box5.linearVelocity = glm::vec2(0, -.2);
+	box5.angularVelocity = .1;
+	*/
+	
+	//rigidBodySimulator.rigidBodies.push_back(&box);
+	//rigidBodySimulator.rigidBodies.push_back(&box2);
+	//box.position = glm::vec2(-5, 0);
+	//box.angularVelocity = .03;
+	//box.depth = 2;
+	//box.linearVelocity = glm::vec2(.2, .05);
+	//rigidBodySimulator.rigidBodies.push_back(&floorBox);
+	//floorBox.position = glm::vec2(0, -2);
+	//floorBox.depth = 10;
+	//floorBox.color = glm::vec3(.25, .2, .2);
+	//box2.position = glm::vec2(1, -.5);
+	//box2.color = glm::vec3(.5, 1.0, .31);
 
 	// glfw: initialize and configure
 	// ------------------------------
@@ -200,7 +247,7 @@ int main()
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		std::cout << "frame delta: " << deltaTime << std::endl;
+		//std::cout << "frame delta: " << deltaTime << std::endl;
 
 		// input
 		// -----
@@ -226,8 +273,10 @@ int main()
 
 		// world transformation
 		rigidBodySimulator.DrawBodies(lightingShader, cubeVAO);
-		rigidBodySimulator.UpdateLoop(.05);
-		rigidBodySimulator.ApplyAcceleration(glm::vec2(0, -.1));
+		if (!paused) {
+			rigidBodySimulator.UpdateLoop(.025);
+			rigidBodySimulator.ApplyAcceleration(glm::vec2(0, -.01));
+		}
 
 
 
@@ -265,7 +314,8 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
+bool pNotHeld = true;
+void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -278,6 +328,13 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && pNotHeld) {
+		paused = !paused;
+		pNotHeld = false;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE) {
+		pNotHeld = true;
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

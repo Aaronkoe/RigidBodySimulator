@@ -2,14 +2,14 @@
 
 void RigidBodySimulator::UpdateLoop(float dt)
 {
-	for (int i = 0; i < 10; i++) {
-		AdvanceTime(dt/10);
+	//for (int i = 0; i < 10; i++) {
+		AdvanceTime(dt);
 		if (AreAnyCollisions()) {
 			AdvanceTime(-dt/10);
 			AdvanceToCollisionDt(dt/10);
 			HandleCollisions();
 		}
-	}
+	//}
 }
 
 void RigidBodySimulator::AdvanceTime(float dt)
@@ -66,7 +66,7 @@ float RigidBodySimulator::AdvanceToCollisionDt(float dt)
 
 void RigidBodySimulator::HandleCollisions()
 {
-	constexpr float epsilon = .5;
+	constexpr float epsilon = .3;
 	std::cout << "handling a collision" << std::endl;
 	for (int i = 0; i < collisions.size(); ++i) {
 		Collision& currCollision = collisions[i];
@@ -77,7 +77,7 @@ void RigidBodySimulator::HandleCollisions()
 		glm::vec2 va1 = vertexBody->linearVelocity;
 		glm::vec2 vb1 = faceBody->linearVelocity;
 		glm::vec2 collisionPoint = vertexBody->PointBodyToWorld(vertexBody->vertices[currCollision.vertexThatIsColliding]);
-		glm::vec2 rap = -vertexBody->position + collisionPoint; // double check
+		glm::vec2 rap = -vertexBody->position + collisionPoint;
 		glm::vec2 rbp = -faceBody->position + collisionPoint;
 		glm::vec2 n = faceBody->GetNormalOfPoint(collisionPoint);
 		glm::vec2 vap1 = vertexBody->linearVelocity + glm::vec2(-omegaA1 * rap.x, omegaA1 * rap.y);
@@ -98,6 +98,7 @@ void RigidBodySimulator::HandleCollisions()
 		vertexBody->linearVelocity = va2;
 		faceBody->linearVelocity = vb2;
 		faceBody->angularVelocity = omegaB2;
+		std::cout << j << std::endl;
 	}
 }
 

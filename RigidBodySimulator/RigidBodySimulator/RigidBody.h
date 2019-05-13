@@ -14,6 +14,7 @@
 class RigidBody2D {
 public:
 	RigidBody2D(float m, float w, float h);
+	RigidBody2D() = default;
 	void Draw(Shader& shader, unsigned int vao);
 	void ApplyForce(glm::vec2 force, glm::vec2 arm);
 	void Update(float dt);

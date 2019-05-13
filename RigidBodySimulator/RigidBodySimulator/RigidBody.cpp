@@ -57,7 +57,7 @@ void CarnegieRigidBody::Update(float dt) {
 	this->orientation += glm::quat(.5f * (quatProd)* dt);
 	this->orientation = glm::normalize(orientation);
 	this->linMomentum += force * dt;
-	this->linMomentum *= .9995f;
+	this->linMomentum *= .995f;
 	this->angMomentum += torque * dt;
 
 	this->force = glm::vec3(0, 0, 0);
@@ -236,6 +236,9 @@ void RigidBody2D::Update(float dt)
 	
 	force = glm::vec2(0, 0);
 	torque = 0;
+
+	//linearVelocity *= .9995;
+	//angularVelocity *= .9995;
 }
 
 void RigidBody2D::FloorCollision()
