@@ -21,8 +21,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 1080;
+const unsigned int SCR_HEIGHT = 720;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -38,6 +38,7 @@ bool paused = true;
 // lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
+float elapsedTime = 0;
 int main()
 {
 	carBox.position = glm::vec3(0, 0, 0);
@@ -196,8 +197,20 @@ int main()
 
 		// world transformation
 		if (!paused) {
-			carBox.ComputeForceAndTorque(glm::vec3(0, .001, 0), glm::vec3(.5, .5, .5));
-			carBox.ComputeForceAndTorque(glm::vec3(0, -.001, 0), glm::vec3(0, 0, 0));
+			std::cout << elapsedTime << std::endl;
+			elapsedTime += deltaTime;
+			if (elapsedTime < 3.0) {
+				carBox.ComputeForceAndTorque(glm::vec3(0, .001, 0), glm::vec3(.5, .5, .5));
+				carBox.ComputeForceAndTorque(glm::vec3(0, -.001, 0), glm::vec3(0, 0, 0));
+			}
+			else if (elapsedTime < 6.0) {
+				carBox.ComputeForceAndTorque(glm::vec3(.001, -.001, 0), glm::vec3(.5, .5, .5));
+				carBox.ComputeForceAndTorque(glm::vec3(-.001, .001, 0), glm::vec3(0, 0, 0));
+			}
+			else {
+				carBox.ComputeForceAndTorque(glm::vec3(0, .001, 0), glm::vec3(.5, 0, 0));
+				carBox.ComputeForceAndTorque(glm::vec3(0, -.001, 0), glm::vec3(0, 0, 0));
+			}
 		}
 		carBox.orientation = glm::normalize(carBox.orientation);
 		glm::quat quaternion = glm::quat(carBox.orientation[1], carBox.orientation[2], carBox.orientation[3], carBox.orientation[0]);
