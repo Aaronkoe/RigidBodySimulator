@@ -2,14 +2,15 @@
 
 void RigidBodySimulator::UpdateLoop(float dt)
 {
-	//for (int i = 0; i < 10; i++) {
-		AdvanceTime(dt);
-		if (AreAnyCollisions()) {
-			AdvanceTime(-dt/10);
-			AdvanceToCollisionDt(dt/10);
-			HandleCollisions();
-		}
-	//}
+	float timeAdvanced;
+	AdvanceTime(dt);
+	if (AreAnyCollisions()) {
+		AdvanceTime(-dt);
+		timeAdvanced = AdvanceToCollisionDt(dt);
+		HandleCollisions();
+		AdvanceTime(dt - timeAdvanced);
+		std::cout << "time advanced =" << timeAdvanced << std::endl;
+	}
 }
 
 void RigidBodySimulator::AdvanceTime(float dt)
@@ -61,13 +62,14 @@ float RigidBodySimulator::AdvanceToCollisionDt(float dt)
 		}
 		AdvanceTime(dtChunkSize);
 	}
-	return -1;
+	return dt;
 }
 
 void RigidBodySimulator::HandleCollisions()
 {
-	constexpr float epsilon = .3;
+	constexpr float epsilon = .7;
 	std::cout << "handling a collision" << std::endl;
+	std::cout << collisions.size() << std::endl;
 	for (int i = 0; i < collisions.size(); ++i) {
 		Collision& currCollision = collisions[i];
 		RigidBody2D* vertexBody = currCollision.a;
@@ -89,7 +91,7 @@ void RigidBodySimulator::HandleCollisions()
 		float denom2 = 1 / faceBody->mass;
 		float denom3 = glm::dot(glm::vec2(rap.x * n.y, -n.x * rap.y), glm::vec2(rap.x * n.y, -n.x * rap.y)) / vertexBody->momentOfInertia;
 		float denom4 = glm::dot(glm::cross(glm::vec3(rbp.x, rbp.y, 0), glm::vec3(n.x, n.y, 0)), glm::cross(glm::vec3(rbp.x, rbp.y, 0), glm::vec3(n.x, n.y, 0))) / faceBody->momentOfInertia;
-		j = abs(numerator / (denom1 + denom2 + denom3 + denom4));
+		j = .9 * abs(numerator / (denom1 + denom2 + denom3 + denom4));
 		glm::vec2 va2 = va1 + j * n / vertexBody->mass;
 		glm::vec2 vb2 = vb1 - j * n / faceBody->mass;
 		float omegaA2 = omegaA1 + (rap.x * (j * n).y - rap.y * (j * n).x) / vertexBody->momentOfInertia;

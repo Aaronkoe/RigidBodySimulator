@@ -17,8 +17,8 @@
 bool paused = true;
 RigidBody2D box(1, 1, 1);
 RigidBody2D box2(1, 1, 1);
-RigidBody2D box3(1, 2, .5);
-RigidBody2D box4(1, .5, .5);
+RigidBody2D box3(1, 4, .25);
+RigidBody2D box4(1, 1, 1);
 RigidBody2D box5(2, 2, 2);
 RigidBody2D boxes[20];
 RigidBody2D floorBox(100000000, 11, 1);
@@ -49,23 +49,48 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
-	RigidBodySimulator rigidBodySimulator;
+	RigidBodySimulator rigidBodySimulator;/*
 	rigidBodySimulator.rigidBodies.push_back(&box);
 	rigidBodySimulator.rigidBodies.push_back(&box2);
-	rigidBodySimulator.rigidBodies.push_back(&box3);
+	//rigidBodySimulator.rigidBodies.push_back(&box3);
 	rigidBodySimulator.rigidBodies.push_back(&floorBox);
-	floorBox.position = glm::vec2(0, -2);
+	rigidBodySimulator.rigidBodies.push_back(&box4);
+	/*
+	for (int i = 0; i < 20; i++) {
+		boxes[i] = RigidBody2D(.01, .1, .1);
+		boxes[i].depth = .1;
+		boxes[i].position = glm::vec2(0, 1 + i / 3.0);
+		boxes[i].linearVelocity = glm::vec2(0, 0);
+		rigidBodySimulator.rigidBodies.push_back(&boxes[i]);
+		boxes[i].color = glm::vec3(.5 + i / 40.0, 1 - i / 40.0, .31);
+	}
+	floorBox.position = glm::vec2(0, -1.3);
 	floorBox.color = glm::vec3(.25, .2, .2);
-
-	box.position = glm::vec2(0, -1);
-	box.color = glm::vec3(1.0, .5, .31);
-
-	box2.position = glm::vec2(1, 1);
+	floorBox.depth = 10;
+	box3.color = glm::vec3(.31, .5, 1.0);
 	box2.color = glm::vec3(.5, 1.0, .31);
+	box.color = glm::vec3(1.0, .5, .31);
+	box4.color = glm::vec3(1.0, .31, .5);
+
+	box.position = glm::vec2(-4, .5);
+	box.angularVelocity = .03;
+	box.linearVelocity = glm::vec2(.2, 0);
+	box2.position = glm::vec2(1.5, 0);
+	//box2.linearVelocity = glm::vec2(0, -.4);
+	box2.depth = 1;
+	box3.position = glm::vec2(0, 0);
+	box3.angularVelocity = .01;
+	box4.position = glm::vec2(4, 0);
+	
+	/*see saw
+	box.position = glm::vec2(0, -.8);
+
+	box2.position = glm::vec2(1.5, 2);
 
 	box3.position = glm::vec2(0, 0);
-	box3.color = glm::vec3(.31, .5, 1.0);
-	/* 5 boxes in an arena
+	*/
+
+	/* 5 boxes in an arena */
 	rigidBodySimulator.rigidBodies.push_back(&box);
 	rigidBodySimulator.rigidBodies.push_back(&box2);
 	rigidBodySimulator.rigidBodies.push_back(&box3);
@@ -86,7 +111,7 @@ int main()
 
 	box.position = glm::vec2(-1, 0);
 	box.color = glm::vec3(1.0, .5, .31);
-	box.linearVelocity = glm::vec2(.1, .12);
+	box.linearVelocity = glm::vec2(.1, .3);
 	box.angularVelocity = .1;
 
 	box2.position = glm::vec2(1, 0);
@@ -104,7 +129,7 @@ int main()
 	box5.color = glm::vec3(1.0, .31, .5);
 	box5.linearVelocity = glm::vec2(0, -.2);
 	box5.angularVelocity = .1;
-	*/
+	
 	
 	//rigidBodySimulator.rigidBodies.push_back(&box);
 	//rigidBodySimulator.rigidBodies.push_back(&box2);
@@ -275,7 +300,7 @@ int main()
 		rigidBodySimulator.DrawBodies(lightingShader, cubeVAO);
 		if (!paused) {
 			rigidBodySimulator.UpdateLoop(.025);
-			rigidBodySimulator.ApplyAcceleration(glm::vec2(0, -.01));
+			rigidBodySimulator.ApplyAcceleration(glm::vec2(0, -.005));
 		}
 
 
